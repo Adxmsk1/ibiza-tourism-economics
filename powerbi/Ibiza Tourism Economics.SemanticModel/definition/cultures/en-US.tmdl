@@ -1,0 +1,1065 @@
+cultureInfo en-US
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "fact_island_flow.peaktotrough_multiple": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Peak-to-Trough Multiple"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Foreign guests, busiest vs quietest month": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Busiest vs quietest month": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.covid_august_collapse_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "COVID August Collapse %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "COVID: August 2020 vs 2019": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.avg_august_foreign_travellers": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Avg August Foreign Travellers"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.avg_january_foreign_travellers": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Avg January Foreign Travellers"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.peak_season_share_of_travellers": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Peak Season Share of Travellers"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Share of guests in Jun-Sep": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.avg_foreign_travellers___month": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Avg Foreign Travellers / Month"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Foreign guests": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.avg_domestic_travellers___month": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Avg Domestic Travellers / Month"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Spanish residents": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.august_foreign_2019": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "August Foreign 2019"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.august_foreign_2020": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "August Foreign 2020"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.august_foreign_2026": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "August Foreign 2026"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.august_2026_vs_2019_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "August 2026 vs 2019 %"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.total_foreign_travellers": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Total Foreign Travellers"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Foreign guests": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.volume_effect_202122_eur_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Volume Effect 2021-22 (EUR m)"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.volume_effect_202325_eur_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Volume Effect 2023-25 (EUR m)"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.price_effect_202325_eur_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Price Effect 2023-25 (EUR m)"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.price_effect_eur_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Price Effect (EUR m)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "From higher prices": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.volume_effect_eur_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Volume Effect (EUR m)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "From more guest nights": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_province_pricing.adr_2026_eur": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_province_pricing",
+			          "ConceptualProperty": "ADR 2026 (EUR)"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_province_pricing.adr_2014_eur": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_province_pricing",
+			          "ConceptualProperty": "ADR 2014 (EUR)"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "dim_date.month_short": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_date",
+			          "ConceptualProperty": "month_short"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Month": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_date.year": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_date",
+			          "ConceptualProperty": "year"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Year": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_date.month_date": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_date",
+			          "ConceptualProperty": "month_date"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Month": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.san_antonio_peak_occupancy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "San Antonio Peak Occupancy"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.sant_josep_peak_occupancy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Sant Josep Peak Occupancy"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.san_antonio__foreign": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "San Antonio % Foreign"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "San Antonio - guests from abroad": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.sant_josep__foreign": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Sant Josep % Foreign"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Playa d'en Bossa - guests from abroad": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.occupancy_rate": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Occupancy Rate"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Beds filled": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.ibiza_peak_occupancy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Ibiza Peak Occupancy"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.mallorca_peak_occupancy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Mallorca Peak Occupancy"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.catalonia_peak_occupancy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Catalonia Peak Occupancy"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.peak_occupancy_rate": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Peak Occupancy Rate"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "dim_resort.resort_display": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_resort",
+			          "ConceptualProperty": "resort_display"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Resort": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_province_pricing.cover_room_rate_shift": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_province_pricing",
+			          "ConceptualProperty": "Cover Room Rate Shift"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Avg hotel room rate, 2014 → 2026": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.busiest_month_card": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Busiest Month Card"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Busiest month: avg foreign guests": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.quietest_month_card": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Quietest Month Card"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Quietest month: avg foreign guests": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.p1_commentary": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "P1 Commentary"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.foreign_2019_sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Foreign 2019 (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Before COVID (2019)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.foreign_2020_sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Foreign 2020 (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "During COVID (2020)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.covid_change__sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "COVID Change % (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Change, 2020 vs 2019": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.latest_card_sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Latest Card (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Latest year with figures": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.latest_vs_2019__sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Latest vs 2019 % (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Latest year vs 2019": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.p2_commentary": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "P2 Commentary"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.sel_price_effect_eur_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Sel Price Effect (EUR m)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "From higher room rates": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.sel_volume_effect_eur_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Sel Volume Effect (EUR m)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "From more guest nights": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.sel_total_change_eur_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Sel Total Change (EUR m)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total change in hotel income": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_island_flow.p4_commentary": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "P4 Commentary"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_province_pricing.sel_adr_card": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_province_pricing",
+			          "ConceptualProperty": "Sel ADR Card"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Average room rate, latest year": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.san_antonio_occupancy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "San Antonio Occupancy"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "San Antonio - beds filled": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.bossa_occupancy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Bossa Occupancy"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Playa d'en Bossa - beds filled": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.p3_commentary": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "P3 Commentary"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.ibiza_occupancy_sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Ibiza Occupancy (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ibiza resorts": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.mallorca_occupancy_sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Mallorca Occupancy (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mallorca resorts": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.catalonia_occupancy_sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Catalonia Occupancy (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Barcelona-coast resorts": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.top_resort_sel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Top Resort (Sel)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Fullest resort": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_resort_monthly.p5_commentary": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "P5 Commentary"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.season_story": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Season Story"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.season_headline": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Season Headline"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.covid_story": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "COVID Story"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.covid_headline": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "COVID Headline"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.bridge_story": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Bridge Story"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_island_flow.bridge_headline": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_island_flow",
+			          "ConceptualProperty": "Bridge Headline"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.bench_story": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Bench Story"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.bench_headline": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Bench Headline"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.resort_story": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Resort Story"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.resort_headline": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "Resort Headline"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.v_season_swing": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "V Season Swing"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.v_peak_share": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "V Peak Share"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.v_covid": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "V COVID"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.v_occupancy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "V Occupancy"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.v_resorts": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "V Resorts"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.v_growth": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "V Growth"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "fact_resort_monthly.v_room_rate": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fact_resort_monthly",
+			          "ConceptualProperty": "V Room Rate"
+			        }
+			      },
+			      "State": "Generated"
+			    }
+			  }
+			}
+		contentType: json
+

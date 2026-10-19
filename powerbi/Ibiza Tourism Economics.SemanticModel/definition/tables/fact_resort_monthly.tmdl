@@ -1,0 +1,318 @@
+table fact_resort_monthly
+	lineageTag: cd43a607-e4f4-4f7e-9ee3-aba4f9e3dd8d
+
+	measure 'Occupancy Rate' = DIVIDE(AVERAGE(fact_resort_monthly[occ_bedplaces_pct]), 100)
+		formatString: 0.0%
+		lineageTag: ddc8060c-9fa1-4789-8e8e-d7f098b5d829
+
+	measure 'Resort Bar Colour' = IF(SELECTEDVALUE(dim_resort[is_ibiza]) = TRUE(), "#1B6CA8", "#BDB5A6")
+		lineageTag: 45646c21-e4b5-4bba-8312-cd8b206726ce
+
+	measure 'Phase Text' =
+			VAR n = COUNTROWS(VALUES(dim_date[season_phase]))
+			RETURN IF(n = 1,
+			    SWITCH(SELECTEDVALUE(dim_date[season_phase]), "Peak", "the peak months (June-September)", "Shoulder", "the shoulder months (April, May and October)", "Closed", "the winter months (November-March)", "the selected months"),
+			    "all months with open hotels")
+		lineageTag: 7a19e16e-f5ba-4dd7-aee4-43253da20b51
+
+	measure 'Resort Years Text' =
+			VAR y = CALCULATETABLE(VALUES(fact_resort_monthly[year]), REMOVEFILTERS(dim_resort))
+			VAR n = COUNTROWS(y)
+			VAR mn = MINX(y, fact_resort_monthly[year])
+			VAR mx = MAXX(y, fact_resort_monthly[year])
+			RETURN IF(n = 1, "" & mn, mn & "-" & mx)
+		lineageTag: 625c3e4f-c24d-4fdc-a0d3-27abbd6a8097
+
+	measure 'Ibiza Occupancy (Sel)' = CALCULATE([Occupancy Rate], REMOVEFILTERS(dim_resort), dim_resort[region] = "Ibiza")
+		formatString: 0.0%
+		lineageTag: dfcc641a-7daa-48ae-b9ad-ce14b759594b
+
+	measure 'Mallorca Occupancy (Sel)' = CALCULATE([Occupancy Rate], REMOVEFILTERS(dim_resort), dim_resort[region] = "Mallorca")
+		formatString: 0.0%
+		lineageTag: b6ce60e0-e7db-4f7d-b3b3-9d7e806a2ed8
+
+	measure 'Catalonia Occupancy (Sel)' = CALCULATE([Occupancy Rate], REMOVEFILTERS(dim_resort), dim_resort[region] = "Catalonia")
+		formatString: 0.0%
+		lineageTag: fcdecd31-2fd3-4131-bf4c-7eb9f2b1c493
+
+	measure 'P5 Has Data' = IF(NOT ISBLANK([Ibiza Occupancy (Sel)]) && NOT ISBLANK([Mallorca Occupancy (Sel)]) && NOT ISBLANK([Catalonia Occupancy (Sel)]), 1)
+		lineageTag: 70295106-d7f4-47b5-a21a-a0abd8f5e308
+
+	measure 'Top Resort (Sel)' =
+			VAR t = FILTER(ADDCOLUMNS(ALL(dim_resort[resort_display]), "o", [Occupancy Rate]), NOT ISBLANK([o]))
+			VAR b = TOPN(1, t, [o], DESC, dim_resort[resort_display], ASC)
+			RETURN MAXX(b, dim_resort[resort_display]) & ": " & FORMAT(MAXX(b, [o]), "0.0%")
+		lineageTag: 0568fc4e-e22f-4308-8cab-d768af66f765
+
+	measure 'Bench Headline' =
+			VAR ib = [Ibiza Occupancy (Sel)]
+			VAR ma = [Mallorca Occupancy (Sel)]
+			VAR ca = [Catalonia Occupancy (Sel)]
+			RETURN IF(ib < ma,
+			    "No - Ibiza's hotels are " & FORMAT(ib, "0%") & " full in " & [Phase Text] & ", " & FORMAT((ma - ib) * 100, "0") & " points behind Mallorca's resorts, though well ahead of the Barcelona coast (" & FORMAT(ca, "0%") & ").",
+			    "In " & [Phase Text] & ", Ibiza's hotels (" & FORMAT(ib, "0%") & " full) match or beat Mallorca (" & FORMAT(ma, "0%") & ") - but in the peak months that matter most, Mallorca is fuller.")
+		lineageTag: 4ea78714-cef0-4238-8cd9-fa40dcbeab6e
+
+	measure 'Bench Story' =
+			VAR nl = UNICHAR(10) & UNICHAR(10)
+			VAR t = FILTER(ADDCOLUMNS(ALL(dim_resort[resort_display], dim_resort[is_ibiza]), "o", [Occupancy Rate]), NOT ISBLANK([o]))
+			VAR nR = COUNTROWS(t)
+			VAR bestIb = TOPN(1, FILTER(t, dim_resort[is_ibiza] = TRUE()), [o], DESC, dim_resort[resort_display], ASC)
+			VAR place = COUNTROWS(FILTER(t, [o] > MAXX(bestIb, [o]))) + 1
+			VAR nIb = COUNTROWS(FILTER(t, dim_resort[is_ibiza] = TRUE()))
+			RETURN
+			    "If Ibiza's hotels earn more than most, the obvious explanation is that they are fuller. This chapter tests that against five comparable Spanish beach resorts measured by the same survey: three on Mallorca, the neighbouring island with a similar summer trade, and two on the coast near Barcelona." & nl &
+			    "In " & [Phase Text] & " of " & [Resort Years Text] & ", the fullest resort was " & [Top Resort (Sel)] & ". The best Ibiza resort, " & MAXX(bestIb, dim_resort[resort_display]) & ", ranked " & place & " of " & nR & "." &
+			    IF(nIb < 3, " Only " & nIb & " of Ibiza's three resorts report in these months - the others have closed for the winter.", "") & nl &
+			    "That rules out the first lever. Ibiza does not out-earn its neighbours by filling more beds - Mallorca fills more. If the island is more profitable, the difference has to be in what each bed costs, which is where the story goes next."
+		lineageTag: 243dc916-10d9-441e-9d17-651db3f30056
+
+	measure 'P3 Has Data' = IF(CALCULATE(COUNTROWS(fact_resort_monthly), dim_resort[resort] = "Sant Antoni de Portmany") > 0 && CALCULATE(COUNTROWS(fact_resort_monthly), dim_resort[resort] = "Sant Josep de sa Talaia") > 0, 1)
+		lineageTag: 877e4981-a653-432d-8723-6940d04ff575
+
+	measure 'San Antonio Occupancy' = CALCULATE([Occupancy Rate], dim_resort[resort] = "Sant Antoni de Portmany")
+		formatString: 0.0%
+		lineageTag: 52c2d827-4f96-4542-90b3-8f21cd1eee19
+
+	measure 'Bossa Occupancy' = CALCULATE([Occupancy Rate], dim_resort[resort] = "Sant Josep de sa Talaia")
+		formatString: 0.0%
+		lineageTag: 2f3f8345-26d2-43c8-9fef-f9a5f5b9bd75
+
+	measure 'San Antonio % Foreign' = CALCULATE([% Foreign Guests], dim_resort[resort] = "Sant Antoni de Portmany")
+		formatString: 0.0%
+		lineageTag: 6154eb1d-965d-4436-b384-7861d8dc32a1
+
+	measure 'Sant Josep % Foreign' = CALCULATE([% Foreign Guests], dim_resort[resort] = "Sant Josep de sa Talaia")
+		formatString: 0.0%
+		lineageTag: 21080e15-9f21-4dfb-b4ca-2c82614f69c9
+
+	measure 'Resort Headline' =
+			VAR sa = [San Antonio Occupancy]
+			VAR bo = [Bossa Occupancy]
+			RETURN IF(ABS(sa - bo) < 0.01,
+			    "The island's two clubbing strips are equally full (" & FORMAT(sa, "0%") & " and " & FORMAT(bo, "0%") & ") - what separates them is who stays and for how long.",
+			    IF(sa > bo, "San Antonio", "Playa d'en Bossa") & " runs fuller in " & [Phase Text] & " (" & FORMAT(MAX(sa, bo), "0%") & " vs " & FORMAT(MIN(sa, bo), "0%") & ") - but the bigger difference is who stays.")
+		lineageTag: d16daa7c-5618-4d2f-b920-abc3008e73ac
+
+	measure 'Resort Story' =
+			VAR nl = UNICHAR(10) & UNICHAR(10)
+			VAR saLos = CALCULATE(DIVIDE(SUM(fact_resort_monthly[nights_total]), SUM(fact_resort_monthly[guests_total])), dim_resort[resort] = "Sant Antoni de Portmany")
+			VAR boLos = CALCULATE(DIVIDE(SUM(fact_resort_monthly[nights_total]), SUM(fact_resort_monthly[guests_total])), dim_resort[resort] = "Sant Josep de sa Talaia")
+			VAR saG = CALCULATE(SUM(fact_resort_monthly[guests_total]), dim_resort[resort] = "Sant Antoni de Portmany")
+			VAR boG = CALCULATE(SUM(fact_resort_monthly[guests_total]), dim_resort[resort] = "Sant Josep de sa Talaia")
+			VAR boT = TOPN(1, FILTER(ADDCOLUMNS(VALUES(dim_date[month_date]), "o", [Bossa Occupancy]), NOT ISBLANK([o])), [o], DESC, dim_date[month_date], ASC)
+			RETURN
+			    "Ibiza's club economy has two centres. San Antonio, on the west coast, built the island's party reputation in the 1990s; Playa d'en Bossa, south of Ibiza Town, is now home to the biggest venues (Ushuaia, Hi Ibiza, DC-10 nearby). If one strip were taking business from the other, it should show here." & nl &
+			    "In " & [Phase Text] & " of " & [Resort Years Text] & ", San Antonio's hotels were " & FORMAT([San Antonio Occupancy], "0.0%") & " full and Playa d'en Bossa's " & FORMAT([Bossa Occupancy], "0.0%") & ". Playa d'en Bossa took " & FORMAT(boG, "#,0") & " guests to San Antonio's " & FORMAT(saG, "#,0") & ", and they stayed slightly longer (" & FORMAT(boLos, "0.0") & " nights against " & FORMAT(saLos, "0.0") & "); its fullest month was " & FORMAT(MAXX(boT, dim_date[month_date]), "mmmm yyyy") & " at " & FORMAT(MAXX(boT, [o]), "0%") & "." & nl &
+			    FORMAT([Sant Josep % Foreign], "0%") & " of Playa d'en Bossa's guests and " & FORMAT([San Antonio % Foreign], "0%") & " of San Antonio's live abroad. Both strips are full when it matters; the difference is scale and an overwhelmingly international crowd, staying a little longer. Neither strip is crowding out the other - and neither is fuller than Mallorca, which leaves price as the lever the final chapter examines."
+		lineageTag: 9148690f-2ab0-4743-bfc1-13a2f19b160c
+
+	measure 'V Season Swing' = FORMAT(CALCULATE([Peak-to-Trough Multiple], REMOVEFILTERS(dim_date)), "0") & "x"
+		lineageTag: 41d906fd-c318-46e0-a0d7-2a2e0ad8dffe
+
+	measure 'V Peak Share' = FORMAT(CALCULATE([Peak Season Share of Travellers], REMOVEFILTERS(dim_date)), "0%")
+		lineageTag: e3707a29-fbd7-4ebb-a110-0903dd0a9578
+
+	measure 'V COVID' = FORMAT([COVID August Collapse %], "+0%;-0%") & "  " & UNICHAR(8594) & "  " & FORMAT([August 2026 vs 2019 %], "+0%;-0%")
+		lineageTag: 87de3660-42c2-4e6f-972a-7649cc549ad0
+
+	measure 'V Occupancy' =
+			VAR ib = CALCULATE([Occupancy Rate], REMOVEFILTERS(dim_date), REMOVEFILTERS(dim_resort), dim_resort[region] = "Ibiza", dim_date[season_phase] = "Peak", dim_date[year] >= 2024)
+			VAR ma = CALCULATE([Occupancy Rate], REMOVEFILTERS(dim_date), REMOVEFILTERS(dim_resort), dim_resort[region] = "Mallorca", dim_date[season_phase] = "Peak", dim_date[year] >= 2024)
+			RETURN FORMAT(ib, "0%") & "  vs  " & FORMAT(ma, "0%")
+		lineageTag: b742a9d1-b4e4-404a-bc6d-6e91b5e49d9c
+
+	measure 'V Resorts' =
+			VAR sa = CALCULATE([Occupancy Rate], REMOVEFILTERS(dim_date), REMOVEFILTERS(dim_resort), dim_resort[resort] = "Sant Antoni de Portmany", dim_date[season_phase] = "Peak", dim_date[year] >= 2024)
+			VAR bo = CALCULATE([Occupancy Rate], REMOVEFILTERS(dim_date), REMOVEFILTERS(dim_resort), dim_resort[resort] = "Sant Josep de sa Talaia", dim_date[season_phase] = "Peak", dim_date[year] >= 2024)
+			RETURN FORMAT(sa, "0%") & "  vs  " & FORMAT(bo, "0%")
+		lineageTag: 0513456a-278c-45f5-b6ed-033533f6ccdd
+
+	measure 'V Growth' =
+			VAR p23 = SUMX(FILTER(ALL(dim_date[year]), dim_date[year] IN {2023, 2024, 2025}), [Price Effect (EUR m)])
+			VAR v23 = SUMX(FILTER(ALL(dim_date[year]), dim_date[year] IN {2023, 2024, 2025}), [Volume Effect (EUR m)])
+			RETURN UNICHAR(8364) & FORMAT(p23, "0") & "m  vs  " & UNICHAR(8364) & FORMAT(v23, "0") & "m"
+		lineageTag: 6fc4fc88-dfdc-4029-a196-e8438217848d
+
+	measure 'V Room Rate' = [Cover Room Rate Shift]
+		lineageTag: 660583fe-e1da-429e-9e2a-f7fad8074b35
+
+	measure 'Total Guests' = SUM(fact_resort_monthly[guests_total])
+		formatString: #,0
+		lineageTag: 0e58d609-a76a-4efb-a22d-993b5714152a
+
+	measure 'Total Nights' = SUM(fact_resort_monthly[nights_total])
+		formatString: #,0
+		lineageTag: 16213dbe-df69-4c18-8f38-a1a52b7cacf4
+
+	measure 'Avg Occupancy % (Bed-places)' = AVERAGE(fact_resort_monthly[occ_bedplaces_pct])
+		formatString: 0.0
+		lineageTag: 48151326-fcc7-48a7-a0a7-b51de76fd74e
+
+	measure 'Avg Length of Stay (Nights)' = AVERAGE(fact_resort_monthly[avg_length_of_stay_nights])
+		formatString: 0.00
+		lineageTag: 0b399e09-8b44-4382-a405-49bbb5bdef5b
+
+	measure 'Avg Open Establishments' = AVERAGE(fact_resort_monthly[establishments])
+		formatString: 0
+		lineageTag: c5703735-1ca5-4fe9-ade2-62241286f55b
+
+	measure '% Foreign Guests' = DIVIDE(SUM(fact_resort_monthly[guests_foreign]), [Total Guests])
+		formatString: 0.0%
+		lineageTag: da794baa-1dd2-4e01-9397-359673e5cd0a
+
+	column resort
+		dataType: string
+		lineageTag: 272c9c42-fccb-493e-9756-4c0d5e0df1d2
+		summarizeBy: none
+		sourceColumn: resort
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 1b7327ef-c330-46a6-9f8f-009229a546cf
+		summarizeBy: none
+		sourceColumn: month_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		lineageTag: 5c63f118-cfc8-4b6a-9b6f-3bbbc04e83fa
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		lineageTag: 57fd5867-9b31-47a1-899c-2565f03e5dbc
+		summarizeBy: sum
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column guests_domestic
+		dataType: double
+		lineageTag: 59c8f879-2fa3-4e9b-a5ff-a3f26784094d
+		summarizeBy: sum
+		sourceColumn: guests_domestic
+
+		annotation SummarizationSetBy = Automatic
+
+	column guests_foreign
+		dataType: double
+		lineageTag: ca2c4e45-df61-4489-bd79-d781b0125365
+		summarizeBy: sum
+		sourceColumn: guests_foreign
+
+		annotation SummarizationSetBy = Automatic
+
+	column guests_total
+		dataType: double
+		lineageTag: cceef827-83e1-4088-981e-22bd759ba126
+		summarizeBy: sum
+		sourceColumn: guests_total
+
+		annotation SummarizationSetBy = Automatic
+
+	column nights_domestic
+		dataType: double
+		lineageTag: fbd6097b-ac91-4773-bbe0-b5781c43b448
+		summarizeBy: sum
+		sourceColumn: nights_domestic
+
+		annotation SummarizationSetBy = Automatic
+
+	column nights_foreign
+		dataType: double
+		lineageTag: 9a825237-b346-402f-8ee0-3183431d2e24
+		summarizeBy: sum
+		sourceColumn: nights_foreign
+
+		annotation SummarizationSetBy = Automatic
+
+	column nights_total
+		dataType: double
+		lineageTag: 99fde5f3-8455-412d-b5d0-ee5d5885b353
+		summarizeBy: sum
+		sourceColumn: nights_total
+
+		annotation SummarizationSetBy = Automatic
+
+	column establishments
+		dataType: double
+		lineageTag: 3c841c32-b40c-48c8-9232-6e2ccb76ce9b
+		summarizeBy: sum
+		sourceColumn: establishments
+
+		annotation SummarizationSetBy = Automatic
+
+	column rooms
+		dataType: double
+		lineageTag: c7661b30-f529-4f9d-a485-451f6f2fb4da
+		summarizeBy: sum
+		sourceColumn: rooms
+
+		annotation SummarizationSetBy = Automatic
+
+	column bed_places
+		dataType: double
+		lineageTag: 5e112c4c-e710-4062-a708-e44a709be831
+		summarizeBy: sum
+		sourceColumn: bed_places
+
+		annotation SummarizationSetBy = Automatic
+
+	column occ_bedplaces_pct
+		dataType: double
+		lineageTag: deded689-6051-44cd-abf3-8dfbfe536d83
+		summarizeBy: sum
+		sourceColumn: occ_bedplaces_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column occ_weekend_pct
+		dataType: double
+		lineageTag: bc005fd4-5652-4f41-b217-aa31d48b1321
+		summarizeBy: sum
+		sourceColumn: occ_weekend_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column occ_bedrooms_pct
+		dataType: double
+		lineageTag: 50276002-e4f2-48ba-b806-d4a4ac28c2f4
+		summarizeBy: sum
+		sourceColumn: occ_bedrooms_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column staff
+		dataType: double
+		lineageTag: eaa66c45-74ec-4643-8d19-f6653d640278
+		summarizeBy: sum
+		sourceColumn: staff
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_length_of_stay_nights
+		dataType: double
+		lineageTag: abe1a206-5c6d-4a5f-9d2a-09450074afda
+		summarizeBy: sum
+		sourceColumn: avg_length_of_stay_nights
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_resort_monthly = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\ibiza-tourism-economics\data\processed\fact_resort_monthly.csv"), [Delimiter=",", Columns=18, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"resort", type text}, {"month_date", type date}, {"year", Int64.Type}, {"month", Int64.Type}, {"guests_domestic", type number}, {"guests_foreign", type number}, {"guests_total", type number}, {"nights_domestic", type number}, {"nights_foreign", type number}, {"nights_total", type number}, {"establishments", type number}, {"rooms", type number}, {"bed_places", type number}, {"occ_bedplaces_pct", type number}, {"occ_weekend_pct", type number}, {"occ_bedrooms_pct", type number}, {"staff", type number}, {"avg_length_of_stay_nights", type number}})
+				in
+				    #"Changed Type"
+

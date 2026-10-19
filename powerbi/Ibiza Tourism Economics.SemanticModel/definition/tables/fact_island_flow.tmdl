@@ -1,0 +1,352 @@
+table fact_island_flow
+	lineageTag: 6bea4e2f-0eea-4ee6-8df9-bff75c4bd59e
+
+	measure 'Flow Has Data' = IF(NOT ISBLANK([Total Foreign Travellers]), 1)
+		lineageTag: fb621296-edee-43e1-93f3-d80ac78d8bda
+
+	measure 'Avg Foreign Travellers / Month' = AVERAGE(fact_island_flow[travellers_foreign])
+		formatString: #,0
+		lineageTag: fec17365-d1a7-422c-88e5-48641b002edc
+
+	measure 'Avg Domestic Travellers / Month' = AVERAGE(fact_island_flow[travellers_domestic])
+		formatString: #,0
+		lineageTag: 5331d898-5f1f-4989-b13c-4a60e0c1234d
+
+	measure 'Total Travellers' = [Total Foreign Travellers] + [Total Domestic Travellers]
+		formatString: #,0
+		lineageTag: fbfddfc3-996f-4e76-a448-a575b022e0ea
+
+	measure 'Peak-to-Trough Multiple' =
+			VAR byMonth = FILTER(ADDCOLUMNS(VALUES(dim_date[month]), "v", [Avg Foreign Travellers / Month]), NOT ISBLANK([v]) && [v] > 0)
+			RETURN DIVIDE(MAXX(byMonth, [v]), MINX(byMonth, [v]))
+		formatString: 0\x
+		lineageTag: 87e69246-cd88-4945-b3de-d7ef7ee781d8
+
+	measure 'Peak Season Share of Travellers' = DIVIDE(CALCULATE([Total Travellers], dim_date[season_phase] = "Peak"), [Total Travellers])
+		formatString: 0.0%
+		lineageTag: 16cb1b24-5285-46bc-b0ad-6d41f2ba4f4d
+
+	measure 'Busiest Month Card' =
+			VAR t = FILTER(ADDCOLUMNS(VALUES(dim_date[month_name]), "v", [Avg Foreign Travellers / Month]), NOT ISBLANK([v]))
+			VAR b = TOPN(1, t, [v], DESC, dim_date[month_name], ASC)
+			VAR v = MAXX(b, [v])
+			RETURN MAXX(b, dim_date[month_name]) & ": " & IF(v >= 10000, FORMAT(v / 1000, "#,0") & "K", FORMAT(v, "#,0"))
+		lineageTag: 387b3304-ea53-4e9a-9329-37475c44d1d9
+
+	measure 'Quietest Month Card' =
+			VAR t = FILTER(ADDCOLUMNS(VALUES(dim_date[month_name]), "v", [Avg Foreign Travellers / Month]), NOT ISBLANK([v]))
+			VAR b = TOPN(1, t, [v], ASC, dim_date[month_name], ASC)
+			VAR v = MAXX(b, [v])
+			RETURN MAXX(b, dim_date[month_name]) & ": " & IF(v >= 10000, FORMAT(v / 1000, "#,0") & "K", FORMAT(v, "#,0"))
+		lineageTag: 3adcce60-6434-4f12-8c2a-aef2d6a549bf
+
+	measure 'Flow Years Text' =
+			VAR y = VALUES(fact_island_flow[year])
+			VAR n = COUNTROWS(y)
+			VAR mn = MINX(y, fact_island_flow[year])
+			VAR mx = MAXX(y, fact_island_flow[year])
+			RETURN SWITCH(TRUE(), n = 1, "" & mn, n = mx - mn + 1, mn & "-" & mx, n & " selected years between " & mn & " and " & mx)
+		lineageTag: 8c30bcb4-7291-4e30-a791-30e5b09f053c
+
+	measure 'Season Headline' =
+			VAR t = FILTER(ADDCOLUMNS(VALUES(dim_date[month_name]), "v", [Avg Foreign Travellers / Month]), NOT ISBLANK([v]))
+			VAR hi = MAXX(TOPN(1, t, [v], DESC, dim_date[month_name], ASC), dim_date[month_name])
+			VAR lo = MAXX(TOPN(1, t, [v], ASC, dim_date[month_name], ASC), dim_date[month_name])
+			RETURN "Ibiza's hotel year is won in four months: " & hi & " brings " & FORMAT([Peak-to-Trough Multiple], "#,0") & " times as many foreign guests as " & lo & ", and June to September carries " & FORMAT([Peak Season Share of Travellers], "0%") & " of all guests."
+		lineageTag: a67576a1-adbe-4625-8ce9-1d7362e3db87
+
+	measure 'Season Story' =
+			VAR nl = UNICHAR(10) & UNICHAR(10)
+			VAR t = FILTER(ADDCOLUMNS(VALUES(dim_date[month_name]), "v", [Avg Foreign Travellers / Month]), NOT ISBLANK([v]))
+			VAR hi = TOPN(1, t, [v], DESC, dim_date[month_name], ASC)
+			VAR lo = TOPN(1, t, [v], ASC, dim_date[month_name], ASC)
+			VAR missing = COUNTROWS(VALUES(dim_date[month_date])) - COUNTROWS(fact_island_flow)
+			VAR dom = DIVIDE([Total Domestic Travellers], [Total Travellers])
+			RETURN
+			    "Before asking how Ibiza's hotels make money, it helps to see when they make it. Most coastal resorts have a summer peak; Ibiza has a cliff edge, opening for the season in May (with the clubs' opening parties) and closing in October." & nl &
+			    IF(COUNTROWS(VALUES(fact_island_flow[year])) = 1, "In ", "Across ") & [Flow Years Text] & ", the island's hotels averaged " & FORMAT(MAXX(hi, [v]), "#,0") & " foreign guests in " & MAXX(hi, dim_date[month_name]) & " but only " & FORMAT(MAXX(lo, [v]), "#,0") & " in " & MAXX(lo, dim_date[month_name]) & ". Guests living in Spain made up " & FORMAT(dom, "0%") & " of the total - a steadier, smaller market that matters most at the edges of the season." & nl &
+			    "This shapes everything that follows. A hotel that must earn its year in four months has two levers: fill more beds in those months, or charge more for each one. The rest of this report asks which lever Ibiza has been pulling." &
+			    IF(missing > 0, nl & "(INE publishes nothing for " & missing & IF(missing = 1, " month", " months") & " of this period, almost all in winter when hotels are shut; averages use the months with figures.)", "")
+		lineageTag: ddfaca66-245d-40d0-8b44-5c22ffc14170
+
+	measure 'P2 Has Data' = IF(NOT ISBLANK(CALCULATE([Total Foreign Travellers], REMOVEFILTERS(dim_date[year]), dim_date[year] = 2019)) && NOT ISBLANK(CALCULATE([Total Foreign Travellers], REMOVEFILTERS(dim_date[year]), dim_date[year] = 2020)), 1)
+		lineageTag: b012b17e-2393-458b-8b4f-8d8af861cf22
+
+	measure 'Comparable Months' = COUNTROWS(FILTER(VALUES(dim_date[month]), [P2 Has Data] = 1))
+		formatString: 0
+		lineageTag: fe347155-6231-45f5-a221-52d8c00f926c
+
+	measure 'Foreign 2019 (Sel)' = CALCULATE([Total Foreign Travellers], REMOVEFILTERS(dim_date[year]), dim_date[year] = 2019, FILTER(VALUES(dim_date[month]), [P2 Has Data] = 1))
+		formatString: #,0
+		lineageTag: f8d6935f-0306-423c-88a1-3390e56efea3
+
+	measure 'Foreign 2020 (Sel)' = CALCULATE([Total Foreign Travellers], REMOVEFILTERS(dim_date[year]), dim_date[year] = 2020, FILTER(VALUES(dim_date[month]), [P2 Has Data] = 1))
+		formatString: #,0
+		lineageTag: f5c55e53-2713-474f-b56c-c7e5ea771632
+
+	measure 'COVID Change % (Sel)' = DIVIDE([Foreign 2020 (Sel)] - [Foreign 2019 (Sel)], [Foreign 2019 (Sel)])
+		formatString: +0%;-0%;0%
+		lineageTag: affd9d02-b23f-44ae-85a6-7d132741c7ae
+
+	measure 'Latest Year (Sel)' =
+			VAR cm = FILTER(VALUES(dim_date[month]), [P2 Has Data] = 1)
+			VAR need = COUNTROWS(cm)
+			VAR yrs = FILTER(ADDCOLUMNS(CALCULATETABLE(VALUES(dim_date[year]), REMOVEFILTERS(dim_date[year])), "k", CALCULATE(DISTINCTCOUNT(fact_island_flow[month]), cm)), [k] = need)
+			RETURN MAXX(yrs, dim_date[year])
+		formatString: 0
+		lineageTag: fc82610a-526f-4e6a-978d-6f79fc308180
+
+	measure 'Latest Foreign (Sel)' =
+			VAR y = [Latest Year (Sel)]
+			RETURN CALCULATE([Total Foreign Travellers], REMOVEFILTERS(dim_date[year]), dim_date[year] = y, FILTER(VALUES(dim_date[month]), [P2 Has Data] = 1))
+		formatString: #,0
+		lineageTag: 42f9dc8e-efcb-4b56-a706-6fe8f67cbf9a
+
+	measure 'Latest Card (Sel)' = FORMAT([Latest Foreign (Sel)] / 1000, "#,0") & "K in " & [Latest Year (Sel)]
+		lineageTag: a5689e50-8763-403c-8ee6-3a0cb58e0e18
+
+	measure 'Latest vs 2019 % (Sel)' = DIVIDE([Latest Foreign (Sel)] - [Foreign 2019 (Sel)], [Foreign 2019 (Sel)])
+		formatString: +0%;-0%;0%
+		lineageTag: 40dfc0de-c853-4428-a121-b14e134e99a3
+
+	measure 'Month Bar Colour' =
+			VAR y = SELECTEDVALUE(dim_date[year])
+			VAR ly = [Latest Year (Sel)]
+			RETURN SWITCH(TRUE(), y = 2020, "#E8623F", y = ly, "#0E7C7B", "#1B6CA8")
+		lineageTag: 696b51fb-cd57-4689-9256-13fafe4fbfdf
+
+	measure 'Months Text (Sel)' =
+			VAR n = COUNTROWS(VALUES(dim_date[month]))
+			VAR cm = [Comparable Months]
+			RETURN IF(n = 1, SELECTEDVALUE(dim_date[month_name]), "the " & cm & " months with figures for both 2019 and 2020")
+		lineageTag: 2f1b03c0-3b7c-485e-81ac-039d574a15ac
+
+	measure 'P2 Chart Title' = "Foreign hotel guests in " & [Months Text (Sel)] & ", by year"
+		lineageTag: 74533101-b637-4e10-bcdf-98c6632181d9
+
+	measure 'First Recovery Year (Sel)' =
+			VAR v19 = [Foreign 2019 (Sel)]
+			VAR cm = FILTER(VALUES(dim_date[month]), [P2 Has Data] = 1)
+			VAR need = COUNTROWS(cm)
+			VAR rec = FILTER(ADDCOLUMNS(FILTER(CALCULATETABLE(VALUES(dim_date[year]), REMOVEFILTERS(dim_date[year])), dim_date[year] >= 2021), "v", CALCULATE([Total Foreign Travellers], cm), "k", CALCULATE(DISTINCTCOUNT(fact_island_flow[month]), cm)), [k] = need && [v] >= v19)
+			RETURN MINX(rec, dim_date[year])
+		formatString: 0
+		lineageTag: 6043fa57-7970-4125-8000-149f16c4dab1
+
+	measure 'COVID Headline' =
+			VAR one = COUNTROWS(VALUES(dim_date[month])) = 1
+			VAR mt = IF(one, SELECTEDVALUE(dim_date[month_name]), "the comparable months")
+			VAR fr = [First Recovery Year (Sel)]
+			RETURN "COVID wiped out " & FORMAT(-[COVID Change % (Sel)], "0%") & " of " & mt & "'s foreign guests in 2020" &
+			    IF(NOT ISBLANK(fr), " - yet by " & fr & " they were back above 2019, and in " & [Latest Year (Sel)] & " they were " & FORMAT(ABS([Latest vs 2019 % (Sel)]), "0%") & IF([Latest vs 2019 % (Sel)] >= 0, " above", " below") & " 2019.", ", and they have not yet fully returned.")
+		lineageTag: ded94331-1a08-4697-b0df-480e0311d706
+
+	measure 'COVID Story' =
+			VAR nl = UNICHAR(10) & UNICHAR(10)
+			VAR one = COUNTROWS(VALUES(dim_date[month])) = 1
+			VAR mt = [Months Text (Sel)]
+			VAR minM = MINX(FILTER(VALUES(dim_date[month]), [P2 Has Data] = 1), dim_date[month])
+			VAR maxM = MAXX(FILTER(VALUES(dim_date[month]), [P2 Has Data] = 1), dim_date[month])
+			VAR fr = [First Recovery Year (Sel)]
+			RETURN
+			    "The pandemic is the closest thing to a natural experiment the island has had: for one summer, the visitors simply did not come. It shows how exposed a four-month economy is, and how strong the underlying demand really was once travel reopened." & nl &
+			    IF(one, mt & " 2019", "Across " & mt & ", 2019") & " brought " & FORMAT([Foreign 2019 (Sel)], "#,0") & " foreign guests to Ibiza-Formentera's hotels; the same " & IF(one, "month", "months") & " of 2020 brought " & FORMAT([Foreign 2020 (Sel)], "#,0") & " (" & FORMAT([COVID Change % (Sel)], "+0%;-0%") & ")." &
+			    IF(one && maxM <= 2, " January and February 2020 came before Spain's lockdown on 14 March, so they still look like a normal winter.", "") & nl &
+			    IF(NOT ISBLANK(fr), "Demand bounced back fast: arrivals were above 2019 again by " & fr & ", and the latest year, " & [Latest Year (Sel)] & ", reached " & FORMAT([Latest Foreign (Sel)], "#,0") & ". ", "") &
+			    "So the visitors came back - and then some. The question for the next chapters is whether hotels simply filled up again, or whether something else changed." &
+			    IF(one && (maxM <= 4 || minM >= 11), nl & "Note: this is an off-season month with few guests, so the percentages swing on small numbers.", "")
+		lineageTag: 6e39b5c4-5df2-4e39-8619-65ada842c15f
+
+	measure 'August Foreign 2019' = CALCULATE([Total Foreign Travellers], REMOVEFILTERS(dim_date), dim_date[year] = 2019, dim_date[month] = 8)
+		formatString: #,0
+		lineageTag: 7f531039-d63b-40b9-a99f-4cbfac6a5815
+
+	measure 'August Foreign 2020' = CALCULATE([Total Foreign Travellers], REMOVEFILTERS(dim_date), dim_date[year] = 2020, dim_date[month] = 8)
+		formatString: #,0
+		lineageTag: 1294f416-8372-45e6-92ae-99ecf3cfdbc9
+
+	measure 'August Foreign 2026' = CALCULATE([Total Foreign Travellers], REMOVEFILTERS(dim_date), dim_date[year] = 2026, dim_date[month] = 8)
+		formatString: #,0
+		lineageTag: 32ac712d-2c8d-4d45-8b12-df3180360efa
+
+	measure 'COVID August Collapse %' = DIVIDE([August Foreign 2020] - [August Foreign 2019], [August Foreign 2019])
+		formatString: +0%;-0%
+		lineageTag: 06e4b3dd-5d21-44f4-8ed9-952836bf8b31
+
+	measure 'August 2026 vs 2019 %' = DIVIDE([August Foreign 2026] - [August Foreign 2019], [August Foreign 2019])
+		formatString: +0%;-0%
+		lineageTag: e7d1e740-6ae9-49f2-822c-66ed8a46734f
+
+	measure 'Foreign Nights' = SUM(fact_island_flow[nights_foreign])
+		formatString: #,0
+		lineageTag: b2cd5c7e-184d-4d87-aa82-2a3744b58c31
+
+	measure 'Price Effect (EUR m)' =
+			VAR y = SELECTEDVALUE(dim_date[year])
+			VAR adr = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = y)
+			VAR priorAdr = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = y - 1)
+			VAR priorNights = CALCULATE([Foreign Nights], REMOVEFILTERS(dim_date), dim_date[year] = y - 1)
+			RETURN IF(y <= 2025 && NOT ISBLANK(priorAdr) && NOT ISBLANK(adr), (adr - priorAdr) * priorNights / 1000000)
+		formatString: €#,0.0\m;-€#,0.0\m
+		lineageTag: eeb0c439-b266-4765-a57f-9b4cfae19d32
+
+	measure 'Volume Effect (EUR m)' =
+			VAR y = SELECTEDVALUE(dim_date[year])
+			VAR adr = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = y)
+			VAR priorAdr = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = y - 1)
+			VAR nights = CALCULATE([Foreign Nights], REMOVEFILTERS(dim_date), dim_date[year] = y)
+			VAR priorNights = CALCULATE([Foreign Nights], REMOVEFILTERS(dim_date), dim_date[year] = y - 1)
+			RETURN IF(y <= 2025 && NOT ISBLANK(priorAdr) && NOT ISBLANK(adr), adr * (nights - priorNights) / 1000000)
+		formatString: €#,0.0\m;-€#,0.0\m
+		lineageTag: e286a585-9149-473f-8e19-f1408b23c816
+
+	measure 'P4 Has Data' = IF(NOT ISBLANK([Price Effect (EUR m)]), 1)
+		lineageTag: 4498ee82-f02f-4ba7-b6b7-017d001bbf71
+
+	measure 'Sel Price Effect (EUR m)' = SUMX(VALUES(dim_date[year]), [Price Effect (EUR m)])
+		formatString: €#,0\m;-€#,0\m
+		lineageTag: 90a669e2-efb0-49e2-bdbd-262170df8a2b
+
+	measure 'Sel Volume Effect (EUR m)' = SUMX(VALUES(dim_date[year]), [Volume Effect (EUR m)])
+		formatString: €#,0\m;-€#,0\m
+		lineageTag: c592f147-c553-489e-a750-40dbb4a0a936
+
+	measure 'Sel Total Change (EUR m)' = [Sel Price Effect (EUR m)] + [Sel Volume Effect (EUR m)]
+		formatString: €#,0\m;-€#,0\m
+		lineageTag: dda3b8e5-bba1-4015-a197-dcec8f1dba62
+
+	measure 'Price Share of Growth' =
+			VAR P = [Sel Price Effect (EUR m)]
+			VAR V = [Sel Volume Effect (EUR m)]
+			RETURN IF(P + V > 0 && P > 0 && V > 0, DIVIDE(P, P + V))
+		formatString: 0%
+		lineageTag: e2b1d299-b949-40c5-8866-4625b89c940b
+
+	measure 'Bridge Headline' =
+			VAR eur = UNICHAR(8364)
+			VAR yrs = FILTER(VALUES(dim_date[year]), NOT ISBLANK([Price Effect (EUR m)]))
+			VAR n = COUNTROWS(yrs)
+			VAR y1 = MINX(yrs, dim_date[year])
+			VAR y2 = MAXX(yrs, dim_date[year])
+			VAR P = SUMX(yrs, [Price Effect (EUR m)])
+			VAR V = SUMX(yrs, [Volume Effect (EUR m)])
+			VAR p23 = SUMX(FILTER(ALL(dim_date[year]), dim_date[year] IN {2023, 2024, 2025}), [Price Effect (EUR m)])
+			VAR v23 = SUMX(FILTER(ALL(dim_date[year]), dim_date[year] IN {2023, 2024, 2025}), [Volume Effect (EUR m)])
+			RETURN IF(n = 16,
+			    "The comeback was a volume story; since 2023 it has been a price story - higher room rates added " & eur & FORMAT(p23, "#,0") & "m to the revenue proxy, more guests only " & eur & FORMAT(v23, "#,0") & "m.",
+			    IF(n = 1, "From " & (y1 - 1) & " to " & y1, "From " & (y1 - 1) & " to " & y2) & ", " &
+			    IF(ABS(P) >= ABS(V), "price did more of the work: ", "volume did more of the work: ") &
+			    IF(P < 0, "-", "") & eur & FORMAT(ABS(P), "#,0") & "m from room rates against " & IF(V < 0, "-", "") & eur & FORMAT(ABS(V), "#,0") & "m from guest numbers.")
+		lineageTag: 892228ff-c3cd-4501-a04b-3a72212815cd
+
+	measure 'Bridge Story' =
+			VAR nl = UNICHAR(10) & UNICHAR(10)
+			VAR eur = UNICHAR(8364)
+			VAR yrs = FILTER(VALUES(dim_date[year]), NOT ISBLANK([Price Effect (EUR m)]))
+			VAR y1 = MINX(yrs, dim_date[year])
+			VAR y2 = MAXX(yrs, dim_date[year])
+			VAR a0 = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = y1 - 1)
+			VAR a1 = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = y2)
+			VAR n0 = CALCULATE([Foreign Nights], REMOVEFILTERS(dim_date), dim_date[year] = y1 - 1)
+			VAR n1 = CALCULATE([Foreign Nights], REMOVEFILTERS(dim_date), dim_date[year] = y2)
+			RETURN
+			    "Ibiza's hotels are not fuller than their rivals', so where has the money come from? Each bar splits a year's change in hotel income into more guest nights (volume) and a higher price per night (price)." & nl &
+			    "Between " & (y1 - 1) & " and " & y2 & ", the average Balearic room rate went from " & eur & FORMAT(a0, "0") & " to " & eur & FORMAT(a1, "0") & " a night (" & FORMAT(DIVIDE(a1 - a0, a0), "+0%;-0%") & "), while foreign guest nights went " & IF(n1 >= n0, "up ", "down ") & FORMAT(ABS(DIVIDE(n1 - n0, n0)), "0%") & ". Three acts: steady, mixed growth to 2019; the 2020 collapse and 2021-22 rebound, driven by volume; then, from 2023, a full summer market that can only grow by charging more." & nl &
+			    "The latest official figures confirm it: tourists spent a record " & eur & "4.5bn in Ibiza and Formentera in 2025 while their numbers rose just 1.2% - spending per tourist per day jumped 13%, to about " & eur & "223 (IBESTAT)."
+		lineageTag: bbf34c4a-897f-472f-aa8d-adec51921a01
+
+	measure 'Avg August Foreign Travellers' = CALCULATE([Avg Foreign Travellers / Month], dim_date[month] = 8)
+		formatString: #,0
+		lineageTag: 1d5e1c48-6654-4818-a9a3-a1f5c98eb744
+
+	measure 'Avg January Foreign Travellers' = CALCULATE([Avg Foreign Travellers / Month], dim_date[month] = 1)
+		formatString: #,0
+		lineageTag: 4cf1cbf7-079b-44d2-9653-3ec676005c17
+
+	measure 'Total Foreign Travellers' = SUM(fact_island_flow[travellers_foreign])
+		formatString: #,0
+		lineageTag: e8487dd2-4841-45db-ac55-27052f203b9e
+
+	measure 'Total Domestic Travellers' = SUM(fact_island_flow[travellers_domestic])
+		formatString: #,0
+		lineageTag: 1a008525-f30b-40c1-b92d-33e94a5fee22
+
+	measure 'Total Nights (Island)' = SUM(fact_island_flow[nights_foreign]) + SUM(fact_island_flow[nights_domestic])
+		formatString: #,0
+		lineageTag: 24a70c7e-281d-4631-b4e6-0f3d3801e0f5
+
+	column zone
+		dataType: string
+		lineageTag: 8b085560-968e-4451-9358-bc77ec7679fe
+		summarizeBy: none
+		sourceColumn: zone
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 8fa5d1b5-632e-40df-be6d-3891c1f0515f
+		summarizeBy: none
+		sourceColumn: month_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		lineageTag: b96a677c-e5c0-42d0-856f-b0b402ef20b5
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		lineageTag: 12ec7455-0c6d-49de-b6e2-da1ad435b4e3
+		summarizeBy: sum
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column travellers_domestic
+		dataType: double
+		lineageTag: a743864a-0aac-4710-acf2-8c90206cedad
+		summarizeBy: sum
+		sourceColumn: travellers_domestic
+
+		annotation SummarizationSetBy = Automatic
+
+	column travellers_foreign
+		dataType: double
+		lineageTag: 81fd2523-0370-4f1d-a70a-5448a89dcb09
+		summarizeBy: sum
+		sourceColumn: travellers_foreign
+
+		annotation SummarizationSetBy = Automatic
+
+	column nights_domestic
+		dataType: double
+		lineageTag: 55fe1116-517a-4264-9bf5-a56313e4e449
+		summarizeBy: sum
+		sourceColumn: nights_domestic
+
+		annotation SummarizationSetBy = Automatic
+
+	column nights_foreign
+		dataType: double
+		lineageTag: f87067e9-c3b4-4eeb-b519-b1ece67ab2b6
+		summarizeBy: sum
+		sourceColumn: nights_foreign
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_island_flow = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\ibiza-tourism-economics\data\processed\fact_island_flow.csv"), [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"zone", type text}, {"month_date", type date}, {"year", Int64.Type}, {"month", Int64.Type}, {"travellers_domestic", type number}, {"travellers_foreign", type number}, {"nights_domestic", type number}, {"nights_foreign", type number}})
+				in
+				    #"Changed Type"
+

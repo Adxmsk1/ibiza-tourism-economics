@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Ibiza Tourism Economics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a64c20d2-eb56-46b8-b136-0d572d0211cf"
+  }
+}

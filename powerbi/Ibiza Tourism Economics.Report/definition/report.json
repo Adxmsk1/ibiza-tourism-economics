@@ -1,0 +1,28 @@
+{
+    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.0.0/schema.json",
+    "themeCollection":  {
+
+                        },
+    "resourcePackages":  [
+                             {
+                                 "name":  "RegisteredResources",
+                                 "type":  "RegisteredResources",
+                                 "items":  [
+                                               {
+                                                   "name":  "ibiza_header.png",
+                                                   "path":  "ibiza_header.png",
+                                                   "type":  "Image"
+                                               },
+                                               {
+                                                   "name":  "ibiza_cover.png",
+                                                   "path":  "ibiza_cover.png",
+                                                   "type":  "Image"
+                                               }
+                                           ]
+                             }
+                         ],
+    "settings":  {
+                     "useStylableVisualContainerHeader":  true,
+                     "useEnhancedTooltips":  true
+                 }
+}

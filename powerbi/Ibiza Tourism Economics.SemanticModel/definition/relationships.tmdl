@@ -1,0 +1,16 @@
+relationship 6a2dc558-b7fd-4991-bf02-0fb6b3e66bb8
+	fromColumn: fact_island_flow.month_date
+	toColumn: dim_date.month_date
+
+relationship 0feaed3a-efc1-453d-b664-c174230b5344
+	fromColumn: fact_resort_monthly.month_date
+	toColumn: dim_date.month_date
+
+relationship 3b762391-4b7b-49fb-a6fb-8873942dcf5a
+	fromColumn: fact_resort_monthly.resort
+	toColumn: dim_resort.resort
+
+relationship 3f59c3cb-cbba-47b7-a709-61505a4b3228
+	fromColumn: fact_province_pricing.month_date
+	toColumn: dim_date.month_date
+

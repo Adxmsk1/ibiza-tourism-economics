@@ -1,0 +1,45 @@
+table dim_resort
+	lineageTag: 68992373-cf8b-4490-995f-f5b805ac8eb7
+
+	column resort
+		dataType: string
+		lineageTag: 3a06b604-2320-4ddd-b476-bf68079449a1
+		summarizeBy: none
+		sourceColumn: resort
+
+		annotation SummarizationSetBy = Automatic
+
+	column resort_display
+		dataType: string
+		lineageTag: 5e386d31-2406-4550-8942-e8a703d686f0
+		summarizeBy: none
+		sourceColumn: resort_display
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: a9185895-5fa3-4600-bcd4-ffc3f38ac32c
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_ibiza
+		dataType: boolean
+		lineageTag: 6e8b2f6a-c41b-40c2-be95-c30224e8934d
+		summarizeBy: none
+		sourceColumn: is_ibiza
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_resort = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\ibiza-tourism-economics\data\processed\dim_resort.csv"), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"resort", type text}, {"resort_display", type text}, {"region", type text}, {"is_ibiza", type logical}})
+				in
+				    #"Changed Type"
+

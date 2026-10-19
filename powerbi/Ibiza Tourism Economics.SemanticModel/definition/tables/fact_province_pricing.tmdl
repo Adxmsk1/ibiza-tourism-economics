@@ -1,0 +1,79 @@
+table fact_province_pricing
+	lineageTag: 0b895592-da08-4e22-b913-92cea14b9ad3
+
+	measure 'ADR 2014 (EUR)' = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = 2014)
+		formatString: €#,0.00
+		lineageTag: 964c0c75-f713-4bf4-9121-3b125f61ebe2
+
+	measure 'ADR 2026 (EUR)' = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = 2026)
+		formatString: €#,0.00
+		lineageTag: c9567d53-dbbe-4d04-854d-9da4f515e8d9
+
+	measure 'Cover Room Rate Shift' = UNICHAR(8364) & FORMAT([ADR 2014 (EUR)], "0") & " " & UNICHAR(8594) & " " & UNICHAR(8364) & FORMAT([ADR 2026 (EUR)], "0")
+		lineageTag: 1c988c6d-9eb0-4e7d-bf2a-9a81df1d3554
+
+	measure 'Sel ADR Card' =
+			VAR y = MAX(dim_date[year])
+			VAR a = CALCULATE(AVERAGE(fact_province_pricing[adr_eur]), REMOVEFILTERS(dim_date), dim_date[year] = y)
+			RETURN UNICHAR(8364) & FORMAT(a, "0") & " in " & y
+		lineageTag: 152eb46d-da07-4344-af24-aff207122a4e
+
+	measure 'Avg ADR (EUR)' = AVERAGE(fact_province_pricing[adr_eur])
+		formatString: €#,0.00
+		lineageTag: 6c7098b2-48f3-4b57-bf93-c36254b1c304
+
+	measure 'Avg RevPAR (EUR)' = AVERAGE(fact_province_pricing[revpar_eur])
+		formatString: €#,0.00
+		lineageTag: d85a323c-ae7e-4474-9c58-b20907a20fc0
+
+	column month_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 3f7b677c-b545-4bbf-9b3b-9a074146372b
+		summarizeBy: none
+		sourceColumn: month_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		lineageTag: 457f2443-aa51-4b97-86eb-fe9d3292a711
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		lineageTag: 1c6e5829-0238-4dcc-b25f-a0508393b26a
+		summarizeBy: sum
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column adr_eur
+		dataType: double
+		lineageTag: 94a51d24-9529-465d-980f-f1170b89a4f6
+		summarizeBy: sum
+		sourceColumn: adr_eur
+
+		annotation SummarizationSetBy = Automatic
+
+	column revpar_eur
+		dataType: double
+		lineageTag: ff8155d8-e5f5-406b-a41b-644796d44bbc
+		summarizeBy: sum
+		sourceColumn: revpar_eur
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_province_pricing = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\ibiza-tourism-economics\data\processed\fact_province_pricing.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"month_date", type date}, {"year", Int64.Type}, {"month", Int64.Type}, {"adr_eur", type number}, {"revpar_eur", type number}})
+				in
+				    #"Changed Type"
+

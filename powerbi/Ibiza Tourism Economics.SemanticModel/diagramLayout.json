@@ -1,0 +1,87 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 16135.276865039186,
+            "y": 1680806.0342154708
+          },
+          "nodeIndex": "dim_date",
+          "nodeLineageTag": "2dd504bd-40ee-47d0-a34c-e0c205593ebc",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 1680470.9495372674
+          },
+          "nodeIndex": "dim_resort",
+          "nodeLineageTag": "68992373-cf8b-4490-995f-f5b805ac8eb7",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1136997.0858674506,
+            "y": 3372713.1200238671
+          },
+          "nodeIndex": "fact_island_flow",
+          "nodeLineageTag": "6bea4e2f-0eea-4ee6-8df9-bff75c4bd59e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1074212.6182518343,
+            "y": -50
+          },
+          "nodeIndex": "fact_province_pricing",
+          "nodeLineageTag": "0b895592-da08-4e22-b913-92cea14b9ad3",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 336.4467901034792,
+            "y": 1680406.6167320551
+          },
+          "nodeIndex": "fact_resort_monthly",
+          "nodeLineageTag": "cd43a607-e4f4-4f7e-9ee3-aba4f9e3dd8d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

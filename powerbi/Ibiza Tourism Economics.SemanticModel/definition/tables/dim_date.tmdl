@@ -1,0 +1,72 @@
+table dim_date
+	lineageTag: 2dd504bd-40ee-47d0-a34c-e0c205593ebc
+
+	column year
+		dataType: int64
+		lineageTag: 844558b5-36ea-48b6-9369-7119413fa10c
+		summarizeBy: sum
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		lineageTag: 4f22c66b-2562-4e88-870d-03410634d7c9
+		summarizeBy: sum
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: e3090b44-4aaa-40cd-bb94-e616faa83e5e
+		summarizeBy: none
+		sourceColumn: month_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: 505a07a7-0ee1-4537-bacc-e33bf0f2035e
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column season_phase
+		dataType: string
+		lineageTag: 618ebc51-e123-4bce-8ed0-e6d206194065
+		summarizeBy: none
+		sourceColumn: season_phase
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_short = LEFT(dim_date[month_name], 3)
+		dataType: string
+		lineageTag: 19b54f38-a494-44e3-83a4-8f5d8784ad99
+		summarizeBy: none
+		sortByColumn: month
+
+	column era_sort = SWITCH(TRUE(), dim_date[year] <= 2019, 1, dim_date[year] <= 2021, 2, 3)
+		dataType: int64
+		lineageTag: 9cf57cdb-ffd7-4456-80fc-cd3891dfe1fc
+		summarizeBy: none
+
+	column era = SWITCH(TRUE(), dim_date[year] <= 2019, "Pre-COVID (to 2019)", dim_date[year] <= 2021, "COVID years (2020-21)", "Recovery (2022-26)")
+		dataType: string
+		lineageTag: 5a0e6010-abb6-43d0-9a7c-64913018f325
+		summarizeBy: none
+		sortByColumn: era_sort
+
+	partition dim_date = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\ibiza-tourism-economics\data\processed\dim_date.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"year", Int64.Type}, {"month", Int64.Type}, {"month_date", type date}, {"month_name", type text}, {"season_phase", type text}})
+				in
+				    #"Changed Type"
+

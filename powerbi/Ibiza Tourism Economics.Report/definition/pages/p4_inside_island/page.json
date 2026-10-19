@@ -1,0 +1,93 @@
+{
+    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+    "name":  "p4_inside_island",
+    "displayName":  "4 Inside The Island",
+    "displayOption":  "FitToPage",
+    "height":  720,
+    "width":  1280,
+    "objects":  {
+                    "background":  [
+                                       {
+                                           "properties":  {
+                                                              "transparency":  {
+                                                                                   "expr":  {
+                                                                                                "Literal":  {
+                                                                                                                "Value":  "0D"
+                                                                                                            }
+                                                                                            }
+                                                                               },
+                                                              "color":  {
+                                                                            "solid":  {
+                                                                                          "color":  {
+                                                                                                        "expr":  {
+                                                                                                                     "Literal":  {
+                                                                                                                                     "Value":  "\u0027#F7F1E6\u0027"
+                                                                                                                                 }
+                                                                                                                 }
+                                                                                                    }
+                                                                                      }
+                                                                        }
+                                                          }
+                                       }
+                                   ]
+                },
+    "filterConfig":  {
+                         "filters":  [
+                                         {
+                                             "name":  "resortyrs",
+                                             "field":  {
+                                                           "Column":  {
+                                                                          "Expression":  {
+                                                                                             "SourceRef":  {
+                                                                                                               "Entity":  "dim_date"
+                                                                                                           }
+                                                                                         },
+                                                                          "Property":  "year"
+                                                                      }
+                                                       },
+                                             "type":  "Advanced",
+                                             "filter":  {
+                                                            "Where":  [
+                                                                          {
+                                                                              "Condition":  {
+                                                                                                "Comparison":  {
+                                                                                                                   "Left":  {
+                                                                                                                                "Column":  {
+                                                                                                                                               "Expression":  {
+                                                                                                                                                                  "SourceRef":  {
+                                                                                                                                                                                    "Source":  "s"
+                                                                                                                                                                                }
+                                                                                                                                                              },
+                                                                                                                                               "Property":  "year"
+                                                                                                                                           }
+                                                                                                                            },
+                                                                                                                   "Right":  {
+                                                                                                                                 "Literal":  {
+                                                                                                                                                 "Value":  "2024L"
+                                                                                                                                             }
+                                                                                                                             },
+                                                                                                                   "ComparisonKind":  2
+                                                                                                               }
+                                                                                            }
+                                                                          }
+                                                                      ],
+                                                            "From":  [
+                                                                         {
+                                                                             "Name":  "s",
+                                                                             "Entity":  "dim_date",
+                                                                             "Type":  0
+                                                                         }
+                                                                     ],
+                                                            "Version":  2
+                                                        }
+                                         }
+                                     ]
+                     },
+    "visualInteractions":  [
+                               {
+                                   "source":  "p4_slicer_phase",
+                                   "target":  "p4_chart",
+                                   "type":  "NoFilter"
+                               }
+                           ]
+}
