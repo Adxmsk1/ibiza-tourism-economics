@@ -61,6 +61,10 @@ publish ADR or RevPAR for individual islands, so these aren't Ibiza-only.
 
 ## Gaps
 - 1999 is in INE's table but every value is empty, so the data really starts in January 2000.
-- Resort data starts in March 2024.
+- Resort data mostly starts in 2024 (January to May depending on when each resort's hotels open). Sitges goes back
+  to 2016.
+- 31 months have no island figures. All but two are winter months (November to February), when INE publishes nothing
+  because most hotels are shut. The other two are May and June 2020, during the COVID lockdown.
+- April 2020 has ADR and RevPAR of 0 - hotels were closed by the lockdown.
 - 2026 only goes to August. Full-year comparisons leave it out, or compare January-August on both sides.
 - Prices are Balearics-wide (see above).
