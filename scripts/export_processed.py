@@ -1,4 +1,5 @@
-# star schema from ibiza.duckdb -> data/processed (what power bi reads)
+# star schema from ibiza.duckdb -> data/processed (what power bi reads).
+# the fact queries are sorted so re-running gives identical files (and a clean git diff)
 
 from pathlib import Path
 
@@ -53,7 +54,7 @@ def main():
     dim_resort.to_csv(OUT_DIR / "dim_resort.csv", index=False)
     print(f"dim_resort: {len(dim_resort):,} rows")
 
-    fact_island = con.execute("select * from island_flow_clean").df()
+    fact_island = con.execute("select * from island_flow_clean order by zone, month_date").df()
     fact_island.to_csv(OUT_DIR / "fact_island_flow.csv", index=False)
     print(f"fact_island_flow: {len(fact_island):,} rows")
 
@@ -72,11 +73,12 @@ def main():
             , 2) as avg_length_of_stay_nights
         from resort_flow_clean f
         join resort_stock_clean s using (resort, month_date)
+        order by f.resort, f.month_date
     """).df()
     fact_resort.to_csv(OUT_DIR / "fact_resort_monthly.csv", index=False)
     print(f"fact_resort_monthly: {len(fact_resort):,} rows")
 
-    fact_pricing = con.execute("select * from province_pricing_clean").df()
+    fact_pricing = con.execute("select * from province_pricing_clean order by month_date").df()
     fact_pricing.to_csv(OUT_DIR / "fact_province_pricing.csv", index=False)
     print(f"fact_province_pricing: {len(fact_pricing):,} rows")
 
