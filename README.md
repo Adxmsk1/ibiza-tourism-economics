@@ -7,6 +7,9 @@ Everything here comes from Spain's national statistics office (INE) - monthly ho
 
 ![COVID page](output/powerbi_exports/03_covid.png)
 
+**Built with:** Python (requests, pandas, matplotlib) - SQL in DuckDB - pytest - Power BI (DAX measures, with the
+model and pages saved as TMDL and PBIR) - PowerShell scripts that build and save the Power BI report.
+
 ## Data
 
 [INE](https://www.ine.es)'s hotel occupancy survey (EOH) and hotel profitability indicators (IRSH), through the free
